@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <mvc:annotation-driven/>
+    <context:component-scan base-package="com.nekonekod.learnwebsocket"/>
+
+
+    <!-- 对静态资源文件的访问-->
+    <mvc:resources mapping="/static/**" location="/static/" cache-period="31556926"/>
+
+    <context:property-placeholder location="classpath*:app.properties"/>
+
+    <bean id="bossGroup" class="io.netty.channel.nio.NioEventLoopGroup"/>
+    <bean id="workerGroup" class="io.netty.channel.nio.NioEventLoopGroup"/>
+    <bean id="serverBootstrap" class="io.netty.bootstrap.ServerBootstrap" scope="prototype"/>
+    <bean id="webSocketServer" class="com.nekonekod.learnwebsocket.nettyws.WebSocketServer">
+        <property name="port" value="${websocket.server.port}"/>
+        <property name="childChannelHandler" ref="webSocketChildChannelHandler"/>
+    </bean>
+</beans>
